@@ -32,7 +32,7 @@ window.onload = () => {
             id('num-container').children[i].classList.remove('selected')
           }
           id('num-container').children[i].classList.add('selected');
-          selectedNum = this;
+          selectedNum = id('num-container').children[i];
           updateMove();
         }
       }
@@ -50,7 +50,23 @@ const generateBoard = (board) => {
     if(board.charAt(i) !== '-'){
       tile.textContent = board.charAt(i)
     } else{
-
+      tile.addEventListener('click', () => {
+        //if selecting is not diabled
+        if(!disableSelect) {
+          if(tile.classList.contains('selected')){
+            tile.classList.remove('selected')
+            selectedTile = null;
+          } else{
+            for(let i=0; i< 81; i++){
+              qsa('.tile')[i].classList.remove('selected');
+            }
+            // Add selection and update
+            tile.classList.add('selected');
+            selectedTile = tile;
+            updateMove();
+          }
+        }
+      })
     }
     // Assign tile id
     tile.id = idCount;
@@ -66,6 +82,77 @@ const generateBoard = (board) => {
 
     id('board').appendChild(tile);
   }
+}
+
+const updateMove = () => {
+  if (selectedTile && selectedNum){
+    // SEt tile to correct num
+    selectedTile.textContent = selectedNum.textContent;
+    // if number matches the corresponding number in the solution key
+    if(checkCorrect(selectedTile)){
+      // deselect all tile
+      selectedTile.classList.remove('selected');
+      selectedNum.classList.remove('selected');
+      selectedNum = null;
+      selectedTile = null;
+
+      if(checkDone()){
+        endGame();
+      }
+    } else {
+      // disable selecting new numbers
+      disableSelect = true;
+      // make tile turn red
+      selectedTile.classList.add('incorrect');
+      setTimeout(() => {
+        // subtract lives
+        lives--;
+        if(lives === 0) {endGame();}
+        else {
+          // update lives text
+          id('lives').textContent = "Lives Remaining: " + lives;
+          disableSelect = false;
+        }
+
+        selectedTile.classList.remove("incorrect");
+        selectedTile.classList.remove("selected");
+        // selectedNum.classList.remove('selected');
+
+        selectedTile.textContent = "";
+        selectedTile = null;
+        selectedNum = null;
+      }, 1000)
+    }
+  }
+}
+
+
+const checkDone = () => {
+  let tiles = qsa(".tile");
+  for(let i = 0; i < tiles.length; i++){
+    if(tiles[i].textContent === "") return false
+  }
+
+  return true;
+}
+
+const endGame = () => {
+  disableSelect = true;
+  clearTimeout(timer);
+  if(lives === 0 || timeRemaining === 0){
+    id("lives").textContent = "You Lost";
+  } else {
+    id("lives").textContent = "You Won";
+  }
+}
+
+const checkCorrect = (tile) => {
+  let solution;
+  if(id('diff-1').checked) solution = easy[1];
+  if(id('diff-2').checked) solution = medium[1];
+  if(id('diff-3').checked) solution = hard[1];
+  if(solution.charAt(tile.id) === tile.textContent) return true;
+  else false;
 }
 
 const clearPrevious = () => {
@@ -108,7 +195,7 @@ const startGame = () => {
 
   lives = 3;
   disableSelect = false
-  // id('lives').textContent = "Lives Remaining: 3"
+  id('lives').textContent = "Lives Remaining: 3"
   generateBoard(board);
 
   startTime();
