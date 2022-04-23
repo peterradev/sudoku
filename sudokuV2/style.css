@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+
+#board {
+    padding: 5rem 0;
+    margin: 0 auto;
+    width: 600px;
+    height: 600px;
+}
+
+#board input{
+    height:66.6px;
+    width: 66.6px;
+}
+
+.right-border{
+    border-right: 1px solid black;
+  }
+  
+  .bottomBorder{
+    border-bottom: 1px solid black;
+  }
+
+  .tile {
+    border: 1px solid black;
+    width: 66.6px;
+    height: 66.6px;
+    text-align: center;
+    margin: 0px;
+    vertical-align: middle;
+    font-size: 40px;
+  }
+
+  #solved {
+    padding-top: 5rem;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+  }
+
+  
