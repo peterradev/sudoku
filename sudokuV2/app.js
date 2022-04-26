@@ -23,7 +23,8 @@ for(let i=0; i<squares; i++){
     board.append(inputSquare)
 }
 
-const joinNums = () => {
+const joinNums = (e) => {
+	e.preventDefault();
     const inputs = document.querySelectorAll('input');
     inputs.forEach((input) => {
         if(input.value){
@@ -33,14 +34,14 @@ const joinNums = () => {
         }
     })
     console.log(boardArray);
-    // joinBoard();
-    // console.log(joinBoard())
-    let n = number.length;
-    if(solve(number, n)){
-        console.log(number);
-    }
-    // clearBoard();
-    display(number);
+    joinBoard();
+	console.log(numbers)
+    let n = 9;
+    if(solve(numbers, n)){
+		display(numbers);
+	}
+    console.log(numbers);
+    // // clearBoard();
 }
 
 
@@ -72,32 +73,24 @@ const display = (board) => {
     }
 }
 
-function isSafe(board, row, col, num)
-{
-	
+function isSafe(board, row, col, num){
 	// Row has the unique (row-clash)
-	for(let d = 0; d < board.length; d++)
-	{
-		
+	for(let d = 0; d < board.length; d++){
 		// Check if the number we are trying to
 		// place is already present in
 		// that row, return false;
-		if (board[row][d] == num)
-		{
+		if (board[row][d] == num){
 			return false;
 		}
 	}
 
 	// Column has the unique numbers (column-clash)
-	for(let r = 0; r < board.length; r++)
-	{
-		
+	for(let r = 0; r < board.length; r++){
 		// Check if the number
 		// we are trying to
 		// place is already present in
 		// that column, return false;
-		if (board[r][col] == num)
-		{
+		if (board[r][col] == num){
 			return false;
 		}
 	}
@@ -108,14 +101,9 @@ function isSafe(board, row, col, num)
 	let boxRowStart = row - row % sqrt;
 	let boxColStart = col - col % sqrt;
 
-	for(let r = boxRowStart;
-			r < boxRowStart + sqrt; r++)
-	{
-		for(let d = boxColStart;
-				d < boxColStart + sqrt; d++)
-		{
-			if (board[r][d] == num)
-			{
+	for(let r = boxRowStart; r < boxRowStart + sqrt ; r++){
+		for(let d = boxColStart; d < boxColStart + sqrt; d++) {
+			if (board[r][d] == num){
 				return false;
 			}
 		}
@@ -130,12 +118,9 @@ function solve(board, n)
 	let row = -1;
 	let col = -1;
 	let isEmpty = true;
-	for(let i = 0; i < n; i++)
-	{
-		for(let j = 0; j < n; j++)
-		{
-			if (board[i][j] == 0)
-			{
+	for(let i = 0; i < n; i++){
+		for(let j = 0; j < n; j++){
+			if (board[i][j] == 0){
 				row = i;
 				col = j;
 
@@ -145,33 +130,24 @@ function solve(board, n)
 				break;
 			}
 		}
-		if (!isEmpty)
-		{
+		if (!isEmpty){
 			break;
 		}
 	}
 
 	// No empty space left
-	if (isEmpty)
-	{
+	if (isEmpty){
 		return true;
 	}
-
 	// Else for each-row backtrack
-	for(let num = 1; num <= n; num++)
-	{
-		if (isSafe(board, row, col, num))
-		{
+	for(let num = 1; num <= n; num++){
+		if (isSafe(board, row, col, num)){
 			board[row][col] = num;
-			if (solve(board, n))
-			{
-				
+			if (solve(board, n)){
 				// print(board, n);
 				return true;
 			}
-			else
-			{
-				
+			else{
 				// Replace it
 				board[row][col] = 0;
 			}
@@ -181,11 +157,18 @@ function solve(board, n)
 }
 
 const joinBoard = () => {
-    for(let i=0; i<boardArray.length; i++){
-        const sliced = boardArray.splice(i, 9);
-        numbers.push(sliced);
-        boardArray.splice(0,9);
-    }
+
+	while(boardArray.length)
+		numbers.push(boardArray.splice(0,9))
+    // for(let i=0; i<9; i++){
+    //     const sliced = boardArray.splice(i, 9);
+    //     numbers.push(sliced);
+    //     boardArray.splice(0,9);
+
+	// 	for(let j=0; j < 9; j++){
+	// 		numbers[i][j] = boardArray[i + j]
+	// 	}
+    // }
     console.log(numbers);
 }
 
